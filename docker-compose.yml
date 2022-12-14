@@ -51,3 +51,4 @@ networks:
 
 volumes:
   inventory_api:
+  inventory_backend:
