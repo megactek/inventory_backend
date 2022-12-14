@@ -1,19 +1,5 @@
 version: '3'
 services:
-  web:
-    build: .
-    command: bash -c "python manage.py runserver 0.0.0.0:8000"
-    container_name: inventory_backend
-    restart: always
-    volumes: 
-      - .:/inventory_backend
-    ports:
-      - "8000:8000"
-    networks:
-      - inventoryNet
-
-
-
   inventory_api:
     container_name: inventory_api
     image: postgres
@@ -23,18 +9,25 @@ services:
       PGDATA: /data/inventory_api
     volumes:
       - inventory_api:/data/inventory_api
+    restart: always
+
+  web:
+    build: .
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+    container_name: inventory_backend
+    restart: always
+    volumes: 
+      - .:/inventory_backend
     ports:
-      - "5434:5432"
-    networks:
-      - inventory_api_net
-    restart: unless-stopped
+      - "8000:8000"
+    depends_on:
+      - inventory_api
 
   
   pgadmin:
     container_name: pgadmin4
     image: dpage/pgadmin4
     restart: always
-
     environment:
       PGADMIN_DEFAULT_EMAIL: a@a.com
       PGADMIN_DEFAULT_PASSWORD: a
@@ -42,13 +35,5 @@ services:
       - "5050:80"
 
 
-networks:
-  inventoryNet:
-    driver: bridge
-  inventory_api_net:
-    driver: bridge
-
-
 volumes:
   inventory_api:
-  inventory_backend:
