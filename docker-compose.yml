@@ -41,8 +41,11 @@ services:
     ports:
       - "5050:80"
 
+
 networks:
   inventoryNet:
+    driver: bridge
+  inventory_api_net:
     driver: bridge
 
 
