@@ -1,0 +1,34 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+    container_name: inventory_backend
+    restart: always
+    volumes: 
+      - .:/inventory_backend
+    ports:
+      - "8000:8000"
+    networks:
+      - inventoryNet
+
+
+
+  inventory_api:
+    container_name: inventory_api
+    image: postgres
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "123"
+      PGDATA: /data/inventory_api
+    volumes:
+      - inventory_api:/data/inventory_api
+    ports:
+      - "5434:5432"
+    networks:
+      - inventory_api_net
+    restart: unless-stopped
+
+networks:
+  inventoryNet:
+    driver: bridge
