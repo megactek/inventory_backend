@@ -29,6 +29,22 @@ services:
       - inventory_api_net
     restart: unless-stopped
 
+  
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: a@a.com
+      PGADMIN_DEFAULT_PASSWORD: a
+    ports:
+      - "5050:80"
+
 networks:
   inventoryNet:
     driver: bridge
+
+
+volumes:
+  inventory_api:
